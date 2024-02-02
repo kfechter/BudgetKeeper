@@ -1,0 +1,67 @@
+﻿@page
+@using System.Globalization
+@model IndexModel
+@{
+    ViewData["Title"] = "Debts";
+    var culture = CultureInfo.CreateSpecificCulture("en-US");
+    decimal paidOffValue = 0;
+}
+
+<h1 class="text-center">Current Debts</h1>
+
+@if(Model.CurrentDebts.Count > 0) {
+    <table class="table">
+        <tr>
+            <th>Debt Name</th>
+            <th>Debt Amount</th>
+            <th>Monthly Payment</th>
+            <th></th>
+        </tr>
+        @foreach (var currentDebt in Model.CurrentDebts)
+        {
+            <tr>
+                <td>@currentDebt.DebtName</td>
+                <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
+                <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
+                <td>
+                    <a asp-page="/EditDebt" asp-route-id="@currentDebt.Id">Edit Debt</a> |
+                    <a asp-page="/PayoffDebt" asp-route-id="@currentDebt.Id">Payoff Debt</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else {
+    <h3 class="text-center">No Current Debts</h3>
+}
+
+<div class="text-end"><p>Total Unpaid Debt: @Model.TotalUnpaidDebt.ToString("C2", culture)</p></div>
+<div class="text-end"><p>Total Monthly Spend: @Model.TotalMonthlyPayment.ToString("C2", culture)</p></div>
+
+
+<br>
+<br>
+
+<h1 class ="text-center">Past Debts</h1>
+
+@if (Model.PastDebts.Count > 0) {
+    <table class="table">
+        <tr>
+            <th>Debt Name</th>
+            <th>Debt Amount</th>
+            <th>Monthly Payment</th>
+            <th></th>
+        </tr>
+        @foreach(var pastDebt in Model.PastDebts) {
+            <tr>
+                <td>@pastDebt.DebtName</td>
+                <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
+                <td>@paidOffValue.ToString("C2", culture)</td>
+                <td> <a asp-page="/RestoreDebt" asp-route-id="@pastDebt.Id">Restore Debt</a></td>
+            </tr>
+        }
+    </table>
+}
+else {
+    <h3 class="text-center">No Past Debts</h3>
+}

@@ -1,0 +1,24 @@
+﻿@page
+@model BudgetKeeper.Pages.EditDebtModel
+@{
+    ViewData["Title"] = "Edit Debt";
+}
+
+<h1 class="text-center">Edit Debt</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Debt!.Id" />
+    <div class="form-group">
+        Debt Name: <input asp-for="Debt!.DebtName" />
+    </div>
+    <br />
+    <div class="form-group">
+        Debt Amount: <input asp-for="Debt!.DebtAmount" />
+    </div>
+    <br />
+    <div class="form-group">
+        Monthly Payment: <input asp-for="Debt!.MonthlyPayment" />
+    </div>
+    <br />
+    <input type="submit" />
+</form>
