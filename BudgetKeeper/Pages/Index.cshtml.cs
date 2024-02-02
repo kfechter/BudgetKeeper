@@ -29,19 +29,10 @@ namespace BudgetKeeper.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostPayOff(int id) 
+        public async Task<IActionResult> OnPostAsync(int id, string action)
         {
             var debt = await _context.BudgetItems!.FindAsync(id);
-            debt!.PaidOff = true;
-            _context.BudgetItems!.Update(debt);
-            await _context.SaveChangesAsync();
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostRestore(int id) 
-        {
-            var debt = await _context.BudgetItems!.FindAsync(id);
-            debt!.PaidOff = false;
+            debt!.PaidOff = action == "payoff";
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
             return Page();

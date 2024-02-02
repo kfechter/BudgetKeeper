@@ -26,7 +26,7 @@
                 <td>
                     <a asp-page="/EditDebt" asp-route-id="@currentDebt.Id">Edit Debt</a> |
                     <form asp-page-handler="payoff" method="post">
-                        <button class="btn btn-default" asp-route-id="@currentDebt.Id">Payoff Debt</button>
+                        <button class="btn btn-default" asp-route-id="@currentDebt.Id" asp-route-action="payoff">Payoff Debt</button>
                     </form>
                 </td>
             </tr>
@@ -61,7 +61,7 @@ else {
                 <td>@paidOffValue.ToString("C2", culture)</td>
                 <td> 
                     <form asp-page-handler="restore" method="post">
-                        <button class="btn btn-default" asp-route-id="@pastDebt.Id">Payoff Debt</button>
+                        <button class="btn btn-default" asp-route-id="@pastDebt.Id" asp-route-action="restore">Restore Debt</button>
                     </form>                
                 </td>
             </tr>
