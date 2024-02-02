@@ -35,7 +35,7 @@ namespace BudgetKeeper.Pages
             debt!.PaidOff = true;
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
+            return Page();
         }
 
         public async Task<IActionResult> OnPostRestore(int id) 
@@ -44,7 +44,7 @@ namespace BudgetKeeper.Pages
             debt!.PaidOff = false;
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }
