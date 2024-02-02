@@ -27,5 +27,23 @@ namespace BudgetKeeper.Pages
             TotalUnpaidDebt = CurrentDebts.Sum(x => x.DebtAmount!.Value);
             TotalMonthlyPayment = CurrentDebts.Sum(x => x.MonthlyPayment!.Value);
         }
+
+        public async Task<IActionResult> OnPostPayOffDebtAsync(int id) 
+        {
+            var debt = await _context.BudgetItems!.FindAsync(id);
+            debt!.PaidOff = true;
+            _context.BudgetItems!.Update(debt);
+            await _context.SaveChangesAsync();
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostRestoreDebtAsync(int id) 
+        {
+            var debt = await _context.BudgetItems!.FindAsync(id);
+            debt!.PaidOff = false;
+            _context.BudgetItems!.Update(debt);
+            await _context.SaveChangesAsync();
+            return RedirectToPage();
+        }
     }
 }
