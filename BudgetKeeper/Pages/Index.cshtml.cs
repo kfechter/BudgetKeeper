@@ -20,12 +20,17 @@ namespace BudgetKeeper.Pages
 
         public decimal TotalMonthlyPayment { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        private async Task LoadData()
         {
             CurrentDebts = await _context.BudgetItems!.Where(x => !x.PaidOff!.Value).ToListAsync();
             PastDebts = await _context.BudgetItems!.Where(x =>  x.PaidOff!.Value).ToListAsync();
             TotalUnpaidDebt = CurrentDebts.Sum(x => x.DebtAmount!.Value);
             TotalMonthlyPayment = CurrentDebts.Sum(x => x.MonthlyPayment!.Value);
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            await LoadData();
             return Page();
         }
 
@@ -35,6 +40,7 @@ namespace BudgetKeeper.Pages
             debt!.PaidOff = action == "payoff";
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
+            await LoadData();
             return Page();
         }
     }
