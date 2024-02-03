@@ -16,3 +16,17 @@ steps:
   when:
     branch:
     - main
+
+- name: deploy
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      - from_secret: ssh_host
+    username: 
+      from_secret: ssh_user
+    password: 
+      from_secret: ssh_password
+    port: 22
+    command_timeout: 2m
+    script:
+      - bash /home/kfechter/docker.sh
