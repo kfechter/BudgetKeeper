@@ -15,6 +15,7 @@
             <th>Debt Name</th>
             <th>Debt Amount</th>
             <th>Monthly Payment</th>
+            <th>Payments Left</th>
             <th></th>
         </tr>
         @foreach (var currentDebt in Model.CurrentDebts)
@@ -23,6 +24,7 @@
                 <td>@currentDebt.DebtName</td>
                 <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
                 <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
+                <td>@currentDebt.PaymentsLeft.Value.ToString("C2", culture)</td>
                 <td>
                     <a asp-page="/EditDebt" asp-route-id="@currentDebt.Id">Edit Debt</a> |
                     <form style="display: inline-block;" asp-page-handler="payoff" method="post">

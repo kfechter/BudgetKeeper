@@ -16,5 +16,18 @@ namespace BudgetKeeper.Domain.Entities
         public decimal? MonthlyPayment { get; set; }
 
         public bool? PaidOff { get; set; }
+
+        [NotMapped]
+        public int? PaymentsLeft
+        {
+            get
+            {
+                if (DebtAmount.HasValue && MonthlyPayment.HasValue)
+                {
+                    return (int)Math.Ceiling(DebtAmount.Value / MonthlyPayment.Value);
+                }
+                return null;
+            }
+        }
     }
 }
