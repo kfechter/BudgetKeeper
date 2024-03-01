@@ -24,7 +24,7 @@
                 <td>@currentDebt.DebtName</td>
                 <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
                 <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
-                <td>@currentDebt.PaymentsLeft!.Value.ToString("N", culture)</td>
+                <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
                 <td>
                     <a asp-page="/EditDebt" asp-route-id="@currentDebt.Id">Edit Debt</a> |
                     <form style="display: inline-block;" asp-page-handler="payoff" method="post">
