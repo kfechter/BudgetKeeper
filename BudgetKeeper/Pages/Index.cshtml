@@ -54,12 +54,14 @@ else {
             <th>Debt Name</th>
             <th>Debt Amount</th>
             <th>Monthly Payment</th>
+            <th>Remaining Payments</th>
         </tr>
         @foreach(var pastDebt in Model.PastDebts) {
             <tr>
                 <td>@pastDebt.DebtName</td>
                 <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
                 <td>@paidOffValue.ToString("C2", culture)</td>
+                <td>@pastDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
             </tr>
         }
     </table>
