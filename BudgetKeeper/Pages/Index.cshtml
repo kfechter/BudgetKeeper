@@ -54,18 +54,12 @@ else {
             <th>Debt Name</th>
             <th>Debt Amount</th>
             <th>Monthly Payment</th>
-            <th></th>
         </tr>
         @foreach(var pastDebt in Model.PastDebts) {
             <tr>
                 <td>@pastDebt.DebtName</td>
                 <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
                 <td>@paidOffValue.ToString("C2", culture)</td>
-                <td> 
-                    <form style="display: inline-block;" asp-page-handler="restore" method="post">
-                        <button class="btn-default" asp-route-id="@pastDebt.Id" asp-route-action="restore">Restore Debt</button>
-                    </form>                
-                </td>
             </tr>
         }
     </table>

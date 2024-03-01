@@ -22,6 +22,11 @@ namespace BudgetKeeper.Domain.Entities
         {
             get
             {
+                if(PaidOff.HasValue && PaidOff.Value)
+                {
+                    return 0;
+                }
+
                 if (DebtAmount.HasValue && MonthlyPayment.HasValue)
                 {
                     return (int)Math.Ceiling(DebtAmount.Value / MonthlyPayment.Value);
