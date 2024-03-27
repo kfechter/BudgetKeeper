@@ -1,0 +1,10 @@
+﻿@model BudgetKeeper.Domain.Entities.BudgetItem
+@{
+}
+
+
+<input type="hidden" id="debtIdField" asp-for="@Model.Id" />
+
+<h2>@Model.DebtName - @Model.DebtAmount Remaining</h2>
+
+<p>Marking this debt as paid off cannot be reversed. to re-instate a debt, a new debt will have to be added</p>

@@ -7,10 +7,10 @@
     decimal paidOffValue = 0;
 }
 
-<h1 class="text-center">Current Debts</h1>
+<h1 class="text-center">Current Debts</h1> <button class="btn btn-danger btn-float" type="button" onclick="addItem()">Add New Debt</button>
 
 @if(Model.CurrentDebts.Count > 0) {
-    <table class="table">
+    <table class="table" id="currentDebtsTable">
         <tr>
             <th>Debt Name</th>
             <th>Debt Amount</th>
@@ -26,14 +26,70 @@
                 <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
                 <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
                 <td>
-                    <a asp-page="/EditDebt" asp-route-id="@currentDebt.Id">Edit Debt</a> |
-                    <form style="display: inline-block;" asp-page-handler="payoff" method="post">
-                        <button class="btn-default" asp-route-id="@currentDebt.Id" asp-route-action="payoff">Payoff Debt</button>
-                    </form>
+                    <a class="details" onclick="editItem(@currentDebt.Id)">Edit Debt</a> |
+                    <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a>
                 </td>
             </tr>
         }
     </table>
+    @Html.AntiForgeryToken()
+    <div id="partialModal" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Debt</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="saveItem()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="payoffModal" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payoff Debt?</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" onclick="payoffSaveItem()">Payoff</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="createModal" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Debt</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="createDebt()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 }
 else {
     <h3 class="text-center">No Current Debts</h3>
@@ -69,3 +125,126 @@ else {
 else {
     <h3 class="text-center">No Past Debts</h3>
 }
+
+<script type="text/javascript">
+    function payoffSaveItem() {
+        var id = $("#debtIdField").val();
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=PayoffSaveItem",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
+
+    function saveItem() {
+        var id = $("#debtIdField").val();
+        var debtName = $("#DebtName").val();
+        var debtAmount = $("#DebtAmount").val();
+        var monthlyPayment = $("#MonthlyPayment").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=SaveItem",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id, "debtName": debtName, "debtAmount" : debtAmount, "monthlyPayment": monthlyPayment },
+            success: function(response) {
+                window.location.reload();
+            }
+        });
+    }
+
+    function payoffItem(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=PayoffItem",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id },
+            success: function (response) {
+                $("#payoffModal").find(".modal-body").html(response);
+                $("#payoffModal").modal('show');
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function editItem(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=EditItem",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id },
+            success: function (response) {
+                $("#partialModal").find(".modal-body").html(response);
+                $("#partialModal").modal('show');
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function addItem() {
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddItem",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success: function (response) {
+                $("#createModal").find(".modal-body").html(response);
+                $("#createModal").modal('show');
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function createDebt() {
+        console.log("HERE");
+        var debtName = $("#DebtName").val();
+        var debtAmount = $("#DebtAmount").val();
+        var monthlyPayment = $("#MonthlyPayment").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=CreateDebtSave",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
+</script>

@@ -30,6 +30,8 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");  //be sure add this line
+
 
 var app = builder.Build();
 
