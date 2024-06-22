@@ -7,92 +7,94 @@
     decimal paidOffValue = 0;
 }
 
-<h1 class="text-center">Current Debts</h1> <button class="btn btn-danger btn-float" type="button" onclick="addItem()">Add New Debt</button>
+<h1 class="text-center">Current Debts</h1>
+<button class="btn btn-danger btn-float" type="button" onclick="addItem()">Add New Debt</button>
 @Html.AntiForgeryToken()
+
+<div id="partialModal" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Debt</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="saveItem()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="payoffModal" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payoff Debt?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" onclick="payoffSaveItem()">Payoff</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createModal" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Debt</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="createDebt()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @if(Model.CurrentDebts.Count > 0) {
-    <table class="table" id="currentDebtsTable">
-        <tr>
-            <th>Debt Name</th>
-            <th>Debt Amount</th>
-            <th>Monthly Payment</th>
-            <th>Payments Left</th>
-            <th></th>
-        </tr>
-        @foreach (var currentDebt in Model.CurrentDebts)
+<table class="table" id="currentDebtsTable">
+    <tr>
+        <th>Debt Name</th>
+        <th>Debt Amount</th>
+        <th>Monthly Payment</th>
+        <th>Payments Left</th>
+        <th></th>
+    </tr>
+    @foreach (var currentDebt in Model.CurrentDebts)
         {
-            <tr>
-                <td>@currentDebt.DebtName</td>
-                <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
-                <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
-                <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
-                <td>
-                    <a class="details" onclick="editItem(@currentDebt.Id)">Edit Debt</a> |
-                    <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a>
-                </td>
-            </tr>
+    <tr>
+        <td>@currentDebt.DebtName</td>
+        <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
+        <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
+        <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
+        <td>
+            <a class="details" onclick="editItem(@currentDebt.Id)">Edit Debt</a> |
+            <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a>
+        </td>
+    </tr>
         }
-    </table>
-
-    <div id="partialModal" class="modal hide fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Debt</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="saveItem()">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="payoffModal" class="modal hide fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Payoff Debt?</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" onclick="payoffSaveItem()">Payoff</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="createModal" class="modal hide fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Debt</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" onclick="createDebt()">Create</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+</table>
 }
 else {
-    <h3 class="text-center">No Current Debts</h3>
+<h3 class="text-center">No Current Debts</h3>
 }
 
 <div class="text-end"><p>Total Unpaid Debt: @Model.TotalUnpaidDebt.ToString("C2", culture)</p></div>
@@ -102,28 +104,28 @@ else {
 <br>
 <br>
 
-<h1 class ="text-center">Past Debts</h1>
+<h1 class="text-center">Past Debts</h1>
 
 @if (Model.PastDebts.Count > 0) {
-    <table class="table">
-        <tr>
-            <th>Debt Name</th>
-            <th>Debt Amount</th>
-            <th>Monthly Payment</th>
-            <th>Remaining Payments</th>
-        </tr>
-        @foreach(var pastDebt in Model.PastDebts) {
-            <tr>
-                <td>@pastDebt.DebtName</td>
-                <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
-                <td>@paidOffValue.ToString("C2", culture)</td>
-                <td>@pastDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
-            </tr>
+<table class="table">
+    <tr>
+        <th>Debt Name</th>
+        <th>Debt Amount</th>
+        <th>Monthly Payment</th>
+        <th>Remaining Payments</th>
+    </tr>
+    @foreach(var pastDebt in Model.PastDebts) {
+    <tr>
+        <td>@pastDebt.DebtName</td>
+        <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
+        <td>@paidOffValue.ToString("C2", culture)</td>
+        <td>@pastDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
+    </tr>
         }
-    </table>
+</table>
 }
 else {
-    <h3 class="text-center">No Past Debts</h3>
+<h3 class="text-center">No Past Debts</h3>
 }
 
 <script type="text/javascript">
@@ -156,8 +158,8 @@ else {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "id": id, "debtName": debtName, "debtAmount" : debtAmount, "monthlyPayment": monthlyPayment },
-            success: function(response) {
+            data: { "id": id, "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment },
+            success: function (response) {
                 window.location.reload();
             }
         });
