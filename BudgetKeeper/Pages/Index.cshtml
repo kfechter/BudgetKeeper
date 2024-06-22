@@ -8,7 +8,7 @@
 }
 
 <h1 class="text-center">Current Debts</h1> <button class="btn btn-danger btn-float" type="button" onclick="addItem()">Add New Debt</button>
-
+@Html.AntiForgeryToken()
 @if(Model.CurrentDebts.Count > 0) {
     <table class="table" id="currentDebtsTable">
         <tr>
@@ -32,7 +32,7 @@
             </tr>
         }
     </table>
-    @Html.AntiForgeryToken()
+
     <div id="partialModal" class="modal hide fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
