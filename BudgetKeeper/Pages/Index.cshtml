@@ -87,7 +87,8 @@
         <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
         <td>
             <a class="details" onclick="editItem(@currentDebt.Id)">Edit Debt</a> |
-            <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a>
+            <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a> |
+            <a class="details" onclick="makePayment(@currentDebt.Id)">Make Payment</a>
         </td>
     </tr>
         }
@@ -177,6 +178,27 @@ else {
             success: function (response) {
                 $("#payoffModal").find(".modal-body").html(response);
                 $("#payoffModal").modal('show');
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function makePayment(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=MakePayment",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id },
+            success: function (response) {
+                window.location.reload();
             },
             failure: function (response) {
                 alert(response.responseText);

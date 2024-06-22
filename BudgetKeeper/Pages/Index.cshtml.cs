@@ -53,6 +53,7 @@ namespace BudgetKeeper.Pages
         {
             var debt = await _context.BudgetItems!.FindAsync(id);
             debt!.PaidOff = true;
+            debt.DebtAmount = 0;
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
             await LoadData();
@@ -65,6 +66,7 @@ namespace BudgetKeeper.Pages
             debt!.DebtName = debtName;
             debt!.DebtAmount = debtAmount;
             debt!.MonthlyPayment = monthlyPayment;
+            _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
             await LoadData();
             return Page();
@@ -95,6 +97,21 @@ namespace BudgetKeeper.Pages
                 ViewName = "Dialogs/CreateItemModal",
                 ViewData = new ViewDataDictionary<BudgetItem>(ViewData, new BudgetItem())
             };
+        }
+
+        public async Task<IActionResult> OnPostMakePaymentAsync(int id)
+        {
+            var debt = await _context.BudgetItems!.FindAsync(id);
+            if(debt!.PaymentsLeft == 1)
+            {
+                return await OnPostPayoffSaveItemAsync(id);
+            }
+
+            debt!.DebtAmount -= debt!.MonthlyPayment;
+            _context.BudgetItems!.Update(debt);
+            await _context.SaveChangesAsync();
+            await LoadData();
+            return Page();
         }
     }
 }
