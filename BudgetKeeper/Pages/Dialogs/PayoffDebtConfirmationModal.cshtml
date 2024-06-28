@@ -8,3 +8,9 @@
 <h2>@Model.DebtName - @Model.DebtAmount Remaining</h2>
 
 <p>Marking this debt as paid off cannot be reversed. to re-instate a debt, a new debt will have to be added</p>
+
+@if(Model.BudgetType == Domain.Entities.BudgetType.CreditCard)
+{
+    <p>Close Card on Payoff: <input type="checkbox" asp-for="@Model.CloseCard" /></p>
+    
+}

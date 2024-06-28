@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BudgetKeeper.Domain.Entities
 {
+
+    public enum BudgetType
+    {
+        Loan,
+        CreditCard,
+        Other
+    }
+
     public  class BudgetItem
     {
         [Key]
@@ -16,6 +24,13 @@ namespace BudgetKeeper.Domain.Entities
         public decimal? MonthlyPayment { get; set; }
 
         public bool? PaidOff { get; set; }
+
+        public BudgetType? BudgetType { get; set; }
+
+        public bool IsOpen { get; set; }
+
+        [NotMapped]
+        public bool CloseCard { get; set; }
 
         [NotMapped]
         public int? PaymentsLeft

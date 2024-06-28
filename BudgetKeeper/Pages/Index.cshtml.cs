@@ -34,14 +34,16 @@ namespace BudgetKeeper.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostCreateDebtSaveAsync(string debtName, decimal debtAmount, decimal monthlyPayment)
+        public async Task<IActionResult> OnPostCreateDebtSaveAsync(string debtName, decimal debtAmount, decimal monthlyPayment, BudgetType budgetType, bool isOpen)
         {
             var debt = new BudgetItem
             {
                 DebtName = debtName,
                 DebtAmount = debtAmount,
                 MonthlyPayment = monthlyPayment,
-                PaidOff = false
+                PaidOff = false,
+                BudgetType = budgetType,
+                IsOpen = isOpen
             };
             await _context.BudgetItems!.AddAsync(debt);
             await _context.SaveChangesAsync();
@@ -49,23 +51,35 @@ namespace BudgetKeeper.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostPayoffSaveItemAsync(int id)
+        public async Task<IActionResult> OnPostPayoffSaveItemAsync(int id, bool? closeOnPayoff)
         {
             var debt = await _context.BudgetItems!.FindAsync(id);
             debt!.PaidOff = true;
             debt.DebtAmount = 0;
+            if(debt.BudgetType != BudgetType.CreditCard)
+            {
+                debt.IsOpen = false;
+            }
+
+            if (closeOnPayoff.HasValue && closeOnPayoff.Value)
+            {
+                debt.IsOpen = false;
+            }
+
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
             await LoadData();
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveItemAsync(int id, string debtName, decimal debtAmount, decimal monthlyPayment)
+        public async Task<IActionResult> OnPostSaveItemAsync(int id, string debtName, decimal debtAmount, decimal monthlyPayment, BudgetType budgetType, bool isOpen)
         {
             var debt = await _context.BudgetItems!.FindAsync(id);
             debt!.DebtName = debtName;
             debt!.DebtAmount = debtAmount;
             debt!.MonthlyPayment = monthlyPayment;
+            debt!.BudgetType = budgetType;
+            debt!.IsOpen = isOpen;
             _context.BudgetItems!.Update(debt);
             await _context.SaveChangesAsync();
             await LoadData();
@@ -104,7 +118,7 @@ namespace BudgetKeeper.Pages
             var debt = await _context.BudgetItems!.FindAsync(id);
             if(debt!.PaymentsLeft == 1)
             {
-                return await OnPostPayoffSaveItemAsync(id);
+                return await OnPostPayoffSaveItemAsync(id, null);
             }
 
             debt!.DebtAmount -= debt!.MonthlyPayment;

@@ -30,11 +30,17 @@ namespace BudgetKeeper.EFCore.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BudgetType")
+                        .HasColumnType("integer");
+
                     b.Property<decimal?>("DebtAmount")
                         .HasColumnType("numeric");
 
                     b.Property<string>("DebtName")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("boolean");
 
                     b.Property<decimal?>("MonthlyPayment")
                         .HasColumnType("numeric");

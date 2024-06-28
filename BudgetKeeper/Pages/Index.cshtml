@@ -76,6 +76,8 @@
         <th>Debt Amount</th>
         <th>Monthly Payment</th>
         <th>Payments Left</th>
+        <th>Debt Type</th>
+        <th>Debt Status</th>
         <th></th>
     </tr>
     @foreach (var currentDebt in Model.CurrentDebts)
@@ -85,6 +87,15 @@
         <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
         <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
         <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
+        <td>@currentDebt.BudgetType</td>
+        @if (currentDebt.IsOpen == true)
+        {
+            <td>Open</td>
+        }
+        else
+        {
+            <td>Closed</td>
+        }
         <td>
             <a class="details" onclick="editItem(@currentDebt.Id)">Edit Debt</a> |
             <a class="details" onclick="payoffItem(@currentDebt.Id)">Payoff Debt</a> |
@@ -114,6 +125,8 @@ else {
         <th>Debt Amount</th>
         <th>Monthly Payment</th>
         <th>Remaining Payments</th>
+        <th>Debt Type</th>
+        <th>Debt Status</th>
     </tr>
     @foreach(var pastDebt in Model.PastDebts) {
     <tr>
@@ -121,6 +134,15 @@ else {
         <td>@pastDebt.DebtAmount!.Value.ToString("C2", culture)</td>
         <td>@paidOffValue.ToString("C2", culture)</td>
         <td>@pastDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
+        <td>@pastDebt.BudgetType</td>
+        @if(pastDebt.IsOpen == true)
+        {
+            <td>Open</td>
+        }
+        else
+        {
+            <td>Closed</td>
+        }
     </tr>
         }
 </table>
@@ -132,6 +154,8 @@ else {
 <script type="text/javascript">
     function payoffSaveItem() {
         var id = $("#debtIdField").val();
+        var closeCard = $("#CloseCard").is(":checked");
+
         $.ajax({
             type: "POST",
             url: "/Index?handler=PayoffSaveItem",
@@ -139,7 +163,7 @@ else {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "id": id },
+            data: { "id": id, "closeOnPayoff": closeCard },
             success: function (response) {
                 window.location.reload();
             }
@@ -151,6 +175,8 @@ else {
         var debtName = $("#DebtName").val();
         var debtAmount = $("#DebtAmount").val();
         var monthlyPayment = $("#MonthlyPayment").val();
+        var budgetType = $("#BudgetType").val();
+        var isOpen = $("#IsOpen").is(":checked");
 
         $.ajax({
             type: "POST",
@@ -159,7 +185,7 @@ else {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "id": id, "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment },
+            data: { "id": id, "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment, "budgetType": budgetType, "isOpen" : isOpen },
             success: function (response) {
                 window.location.reload();
             }
@@ -253,10 +279,11 @@ else {
     }
 
     function createDebt() {
-        console.log("HERE");
         var debtName = $("#DebtName").val();
         var debtAmount = $("#DebtAmount").val();
         var monthlyPayment = $("#MonthlyPayment").val();
+        var budgetType = $("#BudgetType").val();
+        var isOpen = $("#IsOpen").is(":checked");
 
         $.ajax({
             type: "POST",
@@ -265,7 +292,7 @@ else {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment },
+            data: { "debtName": debtName, "debtAmount": debtAmount, "monthlyPayment": monthlyPayment, "budgetType": budgetType, "isOpen": isOpen },
             success: function (response) {
                 window.location.reload();
             }
