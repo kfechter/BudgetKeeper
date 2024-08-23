@@ -178,7 +178,7 @@ else {
     }
 
     function closeCard(id) {
-        $ajax({
+        $.ajax({
             type: "POST",
             url: "/Index?handler=CloseCard",
             beforeSend: function (xhr) {
