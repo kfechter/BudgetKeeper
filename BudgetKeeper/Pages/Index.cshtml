@@ -1,5 +1,7 @@
 ﻿@page
 @using System.Globalization
+@using BudgetKeeper.Domain.Entities;
+
 @model IndexModel
 @{
     ViewData["Title"] = "Debts";
@@ -127,6 +129,7 @@ else {
         <th>Remaining Payments</th>
         <th>Debt Type</th>
         <th>Debt Status</th>
+        <th></th>
     </tr>
     @foreach(var pastDebt in Model.PastDebts) {
     <tr>
@@ -142,6 +145,10 @@ else {
         else
         {
             <td>Closed</td>
+        }
+        @if(pastDebt.BudgetType == BudgetType.CreditCard && pastDebt.IsOpen) 
+        {
+            <td><a class="details" onclick="closeCard(@pastDebt.Id)">Close Card</a></td>
         }
     </tr>
         }
@@ -164,6 +171,21 @@ else {
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
             data: { "id": id, "closeOnPayoff": closeCard },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
+
+    function closeCard(id) {
+        $ajax({
+            type: "POST",
+            url: "/Index?handler=CloseCard",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { "id": id },
             success: function (response) {
                 window.location.reload();
             }

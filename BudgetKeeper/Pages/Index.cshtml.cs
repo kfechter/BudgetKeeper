@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace BudgetKeeper.Pages
 {
@@ -93,6 +94,16 @@ namespace BudgetKeeper.Pages
                 ViewName = "Dialogs/PayoffDebtConfirmationModal",
                 ViewData = new ViewDataDictionary<BudgetItem>(ViewData, await _context.BudgetItems!.FindAsync(id))
             };
+        }
+
+        public async Task<IActionResult> OnPostCloseCardAsync(int id)
+        {
+            var debt = await _context.BudgetItems!.FindAsync(id);
+            debt!.IsOpen = false;
+            _context.BudgetItems!.Update(debt);
+            await _context.SaveChangesAsync();
+            await LoadData();
+            return Page();
         }
 
         public async Task<PartialViewResult> OnPostEditItemAsync(int id)
