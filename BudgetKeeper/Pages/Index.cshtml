@@ -87,7 +87,7 @@
     <tr>
         <td>@currentDebt.DebtName</td>
         <td>@currentDebt.DebtAmount!.Value.ToString("C2", culture)</td>
-        <td>@currentDebt.MonthlyPayment!.Value.ToString("C2", culture)</td>
+        <td>@currentDebt.TotalPayment!.Value.ToString("C2", culture)</td>
         <td>@currentDebt.PaymentsLeft!.Value.ToString("N0", culture)</td>
         <td>@currentDebt.BudgetType</td>
         @if (currentDebt.IsOpen == true)

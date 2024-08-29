@@ -61,9 +61,9 @@ namespace BudgetKeeper.Domain.Entities
                     return 0;
                 }
 
-                if (DebtAmount.HasValue && MonthlyPayment.HasValue)
+                if (DebtAmount.HasValue && TotalPayment.HasValue)
                 {
-                    return (int)Math.Ceiling(DebtAmount.Value / MonthlyPayment.Value);
+                    return (int)Math.Ceiling(DebtAmount.Value / TotalPayment.Value);
                 }
                 return null;
             }
