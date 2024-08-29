@@ -10,6 +10,8 @@ namespace BudgetKeeper.Domain.Interfaces
     {
         IBudgetItemRepository BudgetItems { get; }
 
+        ISubDebtRepository SubDebt { get; }
+
         int Complete();
     }
 }

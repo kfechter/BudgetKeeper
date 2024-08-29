@@ -8,6 +8,7 @@ namespace BudgetKeeper.Domain.Entities
     {
         Loan,
         CreditCard,
+        EIP,
         Other
     }
 
@@ -22,6 +23,24 @@ namespace BudgetKeeper.Domain.Entities
         public decimal? DebtAmount { get; set; }
 
         public decimal? MonthlyPayment { get; set; }
+
+        [NotMapped]
+        public decimal? TotalPayment {
+
+            get
+            {
+                if(SubDebts!.Any())
+                {
+                    return SubDebts!.Sum(x => x.MonthlyPayment);
+                }
+                else
+                {
+                    return MonthlyPayment;
+                }
+            }
+        }
+
+        public List<SubDebt>? SubDebts { get; set; }
 
         public bool? PaidOff { get; set; }
 

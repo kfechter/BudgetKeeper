@@ -1,10 +1,5 @@
 ﻿using BudgetKeeper.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BudgetKeeper.EFCore
 {
@@ -21,5 +16,6 @@ namespace BudgetKeeper.EFCore
 
         public DbSet<BudgetItem>? BudgetItems { get; set; }
 
+        public DbSet<SubDebt>? SubDebt { get; set; }
     }
 }

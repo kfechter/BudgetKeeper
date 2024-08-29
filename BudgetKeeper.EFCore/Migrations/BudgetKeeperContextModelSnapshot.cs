@@ -52,6 +52,45 @@ namespace BudgetKeeper.EFCore.Migrations
 
                     b.ToTable("BudgetItems");
                 });
+
+            modelBuilder.Entity("BudgetKeeper.Domain.Entities.SubDebt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BudgetItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("DebtAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("DebtName")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("MonthlyPayment")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BudgetItemId");
+
+                    b.ToTable("SubDebt");
+                });
+
+            modelBuilder.Entity("BudgetKeeper.Domain.Entities.SubDebt", b =>
+                {
+                    b.HasOne("BudgetKeeper.Domain.Entities.BudgetItem", null)
+                        .WithMany("SubDebts")
+                        .HasForeignKey("BudgetItemId");
+                });
+
+            modelBuilder.Entity("BudgetKeeper.Domain.Entities.BudgetItem", b =>
+                {
+                    b.Navigation("SubDebts");
+                });
 #pragma warning restore 612, 618
         }
     }

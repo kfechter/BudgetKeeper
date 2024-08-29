@@ -16,9 +16,12 @@ namespace BudgetKeeper.EFCore.UnitOfWork
         {
             _context = context;
             BudgetItems = new BudgetItemRepository(_context);
+            SubDebt = new SubDebtRepository(_context);
         }
 
         public IBudgetItemRepository BudgetItems { get; private set; }
+
+        public ISubDebtRepository SubDebt {  get; private set; }
 
         public int Complete()
         {

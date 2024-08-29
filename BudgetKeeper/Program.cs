@@ -25,6 +25,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IBudgetItemRepository, BudgetItemRepository>();
+builder.Services.AddTransient<ISubDebtRepository, SubDebtRepository>();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
