@@ -29,7 +29,7 @@ namespace BudgetKeeper.Domain.Entities
 
             get
             {
-                if(SubDebts!.Count != 0)
+                if(SubDebts!.Count > 0)
                 {
                     return SubDebts!.Sum(x => x.MonthlyPayment);
                 }
