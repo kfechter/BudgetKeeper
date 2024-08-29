@@ -29,13 +29,16 @@ namespace BudgetKeeper.Domain.Entities
 
             get
             {
-                if(SubDebts!.Any())
+                if(SubDebts!.Count != 0)
                 {
                     return SubDebts!.Sum(x => x.MonthlyPayment);
                 }
                 else
                 {
-                    return MonthlyPayment;
+                    if(MonthlyPayment.HasValue)
+                        return MonthlyPayment.Value;
+                    else
+                        return 0;
                 }
             }
         }
