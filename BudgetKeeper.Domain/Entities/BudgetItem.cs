@@ -68,7 +68,7 @@ namespace BudgetKeeper.Domain.Entities
                 {
                     return (int)Math.Ceiling(DebtAmount.Value / TotalPayment.Value);
                 }
-                return null;
+                return 0;
             }
         }
     }
