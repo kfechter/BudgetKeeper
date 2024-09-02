@@ -8,11 +8,11 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-var dbServer = Environment.GetEnvironmentVariable("DATABASE_SERVER") ?? "172.16.31.4";
+var dbServer = Environment.GetEnvironmentVariable("DATABASE_SERVER");
 var dbPort = Environment.GetEnvironmentVariable("DATABASE_PORT") ?? "5432";
 var dbName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "budgetkeeper";
 var dbUser = Environment.GetEnvironmentVariable("DATABASE_USER") ?? "budgetkeeper";
-var dbPassword = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ?? "*#Y47z6DUN&&j*";
+var dbPassword = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
 
 var connectionString = $"Server={dbServer};Port={dbPort};Database={dbName};User Id={dbUser};Password={dbPassword};";
 
